@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "675995727257",
+    "project_id": "tolaperto",
+    "storage_bucket": "tolaperto.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675995727257:android:bd3dbfa6570f27bcafcf08",
+        "android_client_info": {
+          "package_name": "id.to.laperto.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnB_bOSFQc1yT9RvjgZ4QTt3a8rwlzgC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
