@@ -1,0 +1,70 @@
+name: Build To Laper To Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build installable APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
+          accept-android-sdk-licenses: 'yes'
+          log-accepted-android-sdk-licenses: 'false'
+
+      - name: Install Android SDK packages
+        shell: bash
+        run: |
+          sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-36" \
+            "build-tools;35.0.0"
+
+      - name: Set up Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Show build environment
+        shell: bash
+        run: |
+          java -version
+          gradle --version
+          sdkmanager --list_installed | sed -n '1,120p'
+
+      - name: Build debug APK
+        shell: bash
+        run: gradle --no-daemon --stacktrace --warning-mode all clean :app:assembleDebug
+
+      - name: Prepare APK artifact
+        shell: bash
+        run: |
+          test -f app/build/outputs/apk/debug/app-debug.apk
+          cp app/build/outputs/apk/debug/app-debug.apk To-Laper-To-v5.8-Android.apk
+          ls -lh To-Laper-To-v5.8-Android.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: To-Laper-To-v5.8-Android
+          path: To-Laper-To-v5.8-Android.apk
+          if-no-files-found: error
+          retention-days: 30
